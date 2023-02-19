@@ -38,11 +38,14 @@ def calculate_canonical(request):
         new_constraint_constant = np.matmul(inv_A_basis, np.asarray(data['constraint_constant']))
         
         input_lp = LP(lp = data)
-        input_lp.save()
+        
         output_lp = LP(lp = {'objective_vector': np.ndarray.tolist(new_objective_vector), 'objective_constant': new_objective_constant, 'A_matrix': np.ndarray.tolist(new_A_matrix), 'constraint_constant': np.ndarray.tolist(new_constraint_constant)})
-        output_lp.save()
+        
         
         history = Calculation(input_LP = input_lp, output_LP = output_lp)
+        
+        input_lp.save()
+        output_lp.save()
         history.save()
         
         return JsonResponse({'objective_vector': np.ndarray.tolist(new_objective_vector), 'objective_constant': new_objective_constant, 'A_matrix': np.ndarray.tolist(new_A_matrix), 'constraint_constant': np.ndarray.tolist(new_constraint_constant)})
