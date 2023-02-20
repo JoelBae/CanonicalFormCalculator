@@ -15,8 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
+from front.views import front
 
 urlpatterns = [
     path('calculator/', include('calculator.urls')),
     path('admin/', admin.site.urls),
+    path("", front, name="front")
 ]
