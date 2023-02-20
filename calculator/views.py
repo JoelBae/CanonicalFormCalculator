@@ -6,6 +6,18 @@ import json
 from calculator.models import LP, Calculation
 from django.views.decorators.csrf import csrf_exempt
 
+def remove_neg_zeroes(n):
+    
+    if n == -0:
+        return 0
+    else:
+        return n
+        
+def mat_remove_neg_zeroes(n):
+    return list(map(remove_neg_zeroes, n))
+        
+        
+
 @csrf_exempt 
 @require_POST  
 def calculate_canonical(request):
@@ -29,13 +41,16 @@ def calculate_canonical(request):
         inv_A_basis_transposed = np.linalg.inv(A_basis_transposed)
         y_vector = np.matmul(inv_A_basis_transposed, objective_basis_vector)
         
-        new_objective_vector = np.subtract(objective_vector, np.matmul(y_vector, A_matrix))
-        new_objective_constant = np.add(np.asarray(data['objective_constant']), np.matmul(y_vector, np.asarray(data['constraint_constant'])))
-        
+        temp =  np.matmul(y_vector, A_matrix)
+        new_objective_vector = np.around(np.subtract(objective_vector, temp), 5)
+        new_objective_constant = np.around(np.add(np.asarray(data['objective_constant']), np.matmul(y_vector, np.asarray(data['constraint_constant']))), 5)
+        if new_objective_constant == -0:
+            new_objective_constant = 0
+            
         #find new constraint
         inv_A_basis = inv_A_basis_transposed.transpose()
-        new_A_matrix = np.matmul(inv_A_basis, A_matrix)
-        new_constraint_constant = np.matmul(inv_A_basis, np.asarray(data['constraint_constant']))
+        new_A_matrix = np.around(np.matmul(inv_A_basis, A_matrix), 5)
+        new_constraint_constant = np.around(np.matmul(inv_A_basis, np.asarray(data['constraint_constant'])), 5)
         
         input_lp = LP(lp = data)
         
@@ -48,7 +63,7 @@ def calculate_canonical(request):
         output_lp.save()
         history.save()
         
-        return JsonResponse({'objective_vector': np.ndarray.tolist(new_objective_vector), 'objective_constant': new_objective_constant, 'A_matrix': np.ndarray.tolist(new_A_matrix), 'constraint_constant': np.ndarray.tolist(new_constraint_constant)})
+        return JsonResponse({'objective_vector': list(map(remove_neg_zeroes, np.ndarray.tolist(new_objective_vector))), 'objective_constant': new_objective_constant, 'A_matrix': list(map(mat_remove_neg_zeroes, np.ndarray.tolist(new_A_matrix))), 'constraint_constant': list(map(remove_neg_zeroes, np.ndarray.tolist(new_constraint_constant)))})
     except:
         return HttpResponseBadRequest()
 

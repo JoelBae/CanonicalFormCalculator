@@ -29,6 +29,7 @@ export default function LP(props) {
         matrix={matrix}
         basis={basis}
         setAnswer={props.setAnswer}
+        setComputed={props.setComputed}
       />
     </div>
   );
@@ -97,18 +98,17 @@ function SubmitButton(props) {
           constraint_constant: props.constraintVector,
           basis: props.basis,
         };
-        props.setAnswer(
-          await fetch("http://127.0.0.1:8000/calculator/calculate", {
-            method: "POST",
-            mode: "no-cors",
-            headers: {
-              "Content-Type": "application/json",
-              "Access-Control-Allow-Origin": "*",
-            },
-            body: JSON.stringify(json),
-          })
-        );
-        console.log(JSON.stringify(json));
+        await fetch("http://127.0.0.1:8000/calculator/calculate", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(json),
+        })
+          .then((response) => response.json())
+          .then((data) => props.setAnswer(data));
+
+        props.setComputed(true);
       }}
     >
       Go!

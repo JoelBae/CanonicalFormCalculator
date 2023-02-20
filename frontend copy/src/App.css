@@ -17,6 +17,7 @@ button {
   display: flex;
   color: rgb(0, 0, 0);
   white-space: nowrap;
+  justify-content: center;
 }
 
 .vars {
@@ -36,6 +37,11 @@ button {
 .objective {
   display: flex;
   align-items: center;
+}
+
+.constraintOutput {
+  display: flex;
+  justify-content: center;
 }
 
 label {

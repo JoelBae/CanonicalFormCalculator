@@ -1,11 +1,13 @@
 import "./App.css";
 import { useState } from "react";
 import LP from "./input.js";
+import Output from "./output";
 
 function App() {
   const [numVars, setNumVars] = useState();
   const [numSubmitted, setNumSubmitted] = useState(false);
   const [answer, setAnswer] = useState();
+  const [computed, setComputed] = useState(false);
   if (numSubmitted) {
     return (
       <div className="App">
@@ -14,8 +16,9 @@ function App() {
           Form
         </h2>
         <header className="App-header">
-          <LP n={numVars} setAnswer={setAnswer} />
+          <LP n={numVars} setAnswer={setAnswer} setComputed={setComputed} />
         </header>
+        <Output answer={answer} computed={computed} />
       </div>
     );
   }
