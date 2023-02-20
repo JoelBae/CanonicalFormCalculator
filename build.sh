@@ -8,6 +8,8 @@ python manage.py migrate
 
 cd frontend*copy
 
+npm i
+
 npm run build
 
 cd ..
