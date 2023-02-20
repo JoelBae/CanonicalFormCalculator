@@ -98,7 +98,7 @@ function SubmitButton(props) {
           constraint_constant: props.constraintVector,
           basis: props.basis,
         };
-        await fetch("http://127.0.0.1:8000/calculator/calculate", {
+        await fetch("/calculator/calculate", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

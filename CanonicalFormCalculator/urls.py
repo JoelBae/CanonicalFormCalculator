@@ -20,5 +20,5 @@ from front.views import front
 urlpatterns = [
     path('calculator/', include('calculator.urls')),
     path('admin/', admin.site.urls),
-    path("", front, name="front")
+    path('', front, name="front")
 ]
