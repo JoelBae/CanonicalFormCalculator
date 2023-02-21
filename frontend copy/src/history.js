@@ -2,6 +2,7 @@ import "katex/dist/katex.min.css";
 import { BlockMath } from "react-katex";
 
 export default function History(props) {
+  console.log(props.history);
   return (
     <div className="history">
       {props.history.map((i, index) => (
