@@ -275,7 +275,7 @@ function Matrix(props) {
                 <td key={j}>
                   <input
                     className="cell"
-                    id={jndex}
+                    id={j}
                     type="number"
                     name="vars"
                     min="-100"
