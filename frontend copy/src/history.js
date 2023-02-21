@@ -27,16 +27,6 @@ export default function History(props) {
 }
 
 function LatexLP(props) {
-  function loadLPFromHistory() {
-    props.setNumVars(props.LP.objective_vector.length);
-    props.setObjVector(props.LP.objective_vector);
-    props.setMatrix(props.LP.A_matrix);
-    props.setConstraintVector(props.LP.constraint_constant);
-    props.setObjConstant(props.LP.objective_constant);
-    props.setBasis(props.LP.basis);
-    props.setNumConstraints(props.LP.A_matrix.length);
-    props.setNumSubmitted(true);
-  }
   return (
     <div className="histLP">
       <Objective LP={props.LP} />
