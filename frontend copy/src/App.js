@@ -57,7 +57,7 @@ function App() {
         <div className="histWrapper">
           Server History
           <History
-            history={hist}
+            history={hist.list}
             setNumVars={setNumVars}
             setObjVector={setObjVector}
             setMatrix={setMatrix}
