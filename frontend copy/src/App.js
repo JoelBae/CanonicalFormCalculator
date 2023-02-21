@@ -4,40 +4,6 @@ import LP from "./input.js";
 import Output from "./output";
 import History from "./history";
 
-const hist = [
-  {
-    objective_vector: [1, 2],
-    objective_constant: 3,
-    A_matrix: [
-      [4, 5],
-      [6, 7],
-    ],
-    constraint_constant: [8, 9],
-    basis: [1, 2],
-  },
-  {
-    objective_vector: [2, 3],
-    objective_constant: 4,
-    A_matrix: [
-      [5, 6],
-      [7, 8],
-    ],
-    constraint_constant: [9, 10],
-    basis: [1, 2],
-  },
-  {
-    objective_vector: [-1, 0, 2],
-    objective_constant: 0,
-    A_matrix: [
-      [4, 5, 6],
-      [-22, 7, 4.2],
-      [1, 1, 1],
-    ],
-    constraint_constant: [8, 9, 33],
-    basis: [1, 2, 3],
-  },
-];
-
 function App() {
   const [numVars, setNumVars] = useState();
   const [numSubmitted, setNumSubmitted] = useState(false);
@@ -52,6 +18,10 @@ function App() {
   const [basis, setBasis] = useState([]);
   const [numConstraints, setNumConstraints] = useState();
   const [constSubmitted, setConstSubmitted] = useState(false);
+
+  const hist = fetch("/calculator/history", {
+    method: "GET",
+  });
 
   if (numSubmitted) {
     return (
