@@ -13,7 +13,7 @@ function App() {
   //for lp
   const [objVector, setObjVector] = useState(new Array(numVars));
   const [objConstant, setObjConstant] = useState(0);
-  const [constraintVector, setConstraintVector] = useState(new Array(numVars));
+  const [constraintVector, setConstraintVector] = useState([]);
   const [matrix, setMatrix] = useState([]);
   const [basis, setBasis] = useState([]);
   const [numConstraints, setNumConstraints] = useState();

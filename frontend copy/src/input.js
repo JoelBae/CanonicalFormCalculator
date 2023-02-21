@@ -181,11 +181,16 @@ function ObjVector(props) {
 }
 
 function ConstVector(props) {
+  const [temp, setTemp] = useState(new Array(Number(props.m)));
+
+  useEffect(() => {
+    props.setConstraintVector(temp);
+  }, [temp, props]);
   return (
     <div className="vertivector">
       <table>
         <tbody>
-          {[...Array(Number(props.n)).keys()].map((i, index) => (
+          {[...Array(Number(props.m)).keys()].map((i, index) => (
             <tr key={i}>
               <td>
                 <input
@@ -198,7 +203,7 @@ function ConstVector(props) {
                   onChange={(e) => {
                     let vec = props.constraintVector;
                     vec[i] = Number(e.target.value);
-                    props.setConstraintVector(vec);
+                    setTemp(vec);
                   }}
                 />
               </td>
@@ -224,7 +229,7 @@ function NumOfConstraints(props) {
           />
           <div className="equals">X =</div>
           <ConstVector
-            n={props.n}
+            m={props.numConstraints}
             constraintVector={props.constraintVector}
             setConstraintVector={props.setConstraintVector}
           />
