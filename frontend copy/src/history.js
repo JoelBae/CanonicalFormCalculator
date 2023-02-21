@@ -38,7 +38,7 @@ function LatexLP(props) {
     props.setNumSubmitted(true);
   }
   return (
-    <div className="histLP" onClick={() => loadLPFromHistory()}>
+    <div className="histLP">
       <Objective LP={props.LP} />
       <Constraints LP={props.LP} />
       <Basis LP={props.LP} />

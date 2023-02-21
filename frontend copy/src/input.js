@@ -145,7 +145,6 @@ function ObjVector(props) {
                     name="vars"
                     min="-100"
                     max="100"
-                    value={props.objVector[i] ? props.objVector[i] : 0}
                     onChange={(e) => {
                       let vec = props.objVector;
                       vec[i] = Number(e.target.value);
@@ -168,7 +167,6 @@ function ObjVector(props) {
                   name="vars"
                   min="-100"
                   max="100"
-                  value={props.objConstant ? props.objConstant : 0}
                   onChange={(e) => {
                     props.setObjConstant(Number(e.target.value));
                   }}
@@ -197,11 +195,6 @@ function ConstVector(props) {
                   name="vars"
                   min="-100"
                   max="100"
-                  value={
-                    props.constraintVector[index]
-                      ? props.constraintVector[index]
-                      : 0
-                  }
                   onChange={(e) => {
                     let vec = props.constraintVector;
                     vec[i] = Number(e.target.value);
@@ -287,13 +280,6 @@ function Matrix(props) {
                     name="vars"
                     min="-100"
                     max="100"
-                    value={
-                      props.matrix[index]
-                        ? props.matrix[index][jndex]
-                          ? props.matrix[index][jndex]
-                          : 0
-                        : 0
-                    }
                     onChange={(e) => {
                       setTemp(
                         temp.map((x, index) => {
