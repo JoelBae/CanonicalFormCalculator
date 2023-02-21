@@ -261,9 +261,7 @@ function Matrix(props) {
   );
 
   useEffect(() => {
-    if (props.matrix === undefined) {
-      props.setMatrix(temp);
-    }
+    props.setMatrix(temp);
   }, [temp, props]);
   return (
     <div className="Matrix">
