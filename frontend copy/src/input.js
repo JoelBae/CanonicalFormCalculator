@@ -268,10 +268,10 @@ function Matrix(props) {
   return (
     <div className="Matrix">
       <table>
-        {[...Array(Number(props.m)).keys()].map((i, index) => (
+        {[...Array(Number(props.m)).keys()].map((i) => (
           <tbody key={index}>
             <tr>
-              {[...Array(Number(props.n)).keys()].map((j, jndex) => (
+              {[...Array(Number(props.n)).keys()].map((j) => (
                 <td key={jndex}>
                   <input
                     className="cell"
