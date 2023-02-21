@@ -69,7 +69,7 @@ def calculate_canonical(request):
 
 @require_GET
 def get_history(request):
-    history = Calculation.objects.all().order_by('-id')[:5:-1]
+    history = Calculation.objects.all().order_by('-id')[:5]
     hist_list = []
     for i in history:
         hist_list.append({"input": i.input_LP.lp, "output": i.output_LP.lp, "date": i.date})
