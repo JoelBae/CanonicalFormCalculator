@@ -67,6 +67,7 @@ function App() {
             setNumConstraints={setNumConstraints}
             numSubmitted={constSubmitted}
             setNumSubmitted={setConstSubmitted}
+            computed={computed}
           />
         </div>
       </div>

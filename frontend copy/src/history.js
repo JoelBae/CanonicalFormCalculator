@@ -2,25 +2,28 @@ import "katex/dist/katex.min.css";
 import { BlockMath } from "react-katex";
 
 export default function History(props) {
-  return (
-    <div className="history">
-      {props.history.map((i, index) => (
-        <LatexLP
-          LP={i}
-          key={index}
-          setNumVars={props.setNumVars}
-          setObjVector={props.setObjVector}
-          setMatrix={props.setMatrix}
-          setConstraintVector={props.setConstraintVector}
-          setObjConstant={props.setObjConstant}
-          setBasis={props.setBasis}
-          setNumConstraints={props.setNumConstraints}
-          numSubmitted={props.numSubmitted}
-          setNumSubmitted={props.setNumSubmitted}
-        />
-      ))}
-    </div>
-  );
+  if (props.computed) {
+    return (
+      <div className="history">
+        {props.history.map((i, index) => (
+          <LatexLP
+            LP={i}
+            key={index}
+            setNumVars={props.setNumVars}
+            setObjVector={props.setObjVector}
+            setMatrix={props.setMatrix}
+            setConstraintVector={props.setConstraintVector}
+            setObjConstant={props.setObjConstant}
+            setBasis={props.setBasis}
+            setNumConstraints={props.setNumConstraints}
+            numSubmitted={props.numSubmitted}
+            setNumSubmitted={props.setNumSubmitted}
+          />
+        ))}
+      </div>
+    );
+  }
+  return;
 }
 
 function LatexLP(props) {
