@@ -40,7 +40,7 @@ function Checkbox(props) {
   return (
     <input
       type="checkbox"
-      checked={props.basis[props.i] ? true : isChecked}
+      checked={isChecked}
       onChange={() => {
         setIsChecked(!isChecked);
         let vec = [];
