@@ -19,9 +19,12 @@ function App() {
   const [numConstraints, setNumConstraints] = useState();
   const [constSubmitted, setConstSubmitted] = useState(false);
 
-  const hist = fetch("/calculator/history", {
+  let hist;
+  fetch("/calculator/history", {
     method: "GET",
-  });
+  })
+    .then((response) => response.json())
+    .then((data) => (hist = data));
 
   if (numSubmitted) {
     return (
