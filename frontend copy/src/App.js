@@ -1,6 +1,5 @@
 import "./App.css";
-import { useState } from "react";
-import { useFetch } from "react-async";
+import { useEffect, useState } from "react";
 import LP from "./input.js";
 import Output from "./output";
 import History from "./history";
@@ -19,10 +18,15 @@ function App() {
   const [basis, setBasis] = useState([]);
   const [numConstraints, setNumConstraints] = useState();
   const [constSubmitted, setConstSubmitted] = useState(false);
+  const [hist, setHist] = useState();
 
-  let hist = useFetch("/calculator/history", {
-    method: "GET",
-  });
+  useEffect(() => {
+    fetch("/calculator/history", {
+      method: "GET",
+    })
+      .then((response) => response.json())
+      .then((data) => setHist(data));
+  }, []);
 
   if (numSubmitted) {
     return (
