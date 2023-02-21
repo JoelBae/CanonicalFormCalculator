@@ -5,6 +5,18 @@
 button {
   font-family: "Courier ", Courier, monospace;
 }
+
+.history {
+  border: solid;
+  border-radius: 5%;
+  align-content: center;
+  width: fit-content;
+  text-align: center;
+  height: 250px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
 .top {
   display: flex;
   flex-direction: column;
@@ -51,4 +63,19 @@ label {
 input {
   height: fit-content;
   width: fit-content;
+}
+
+.output {
+  text-align: center;
+}
+
+.histWrapper {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.histLP {
+  border-bottom: solid;
+  border-color: grey;
 }

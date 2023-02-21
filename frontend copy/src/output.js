@@ -5,6 +5,7 @@ export default function Output(props) {
   if (props.computed) {
     return (
       <div className="output">
+        <p>The Canonical Form is</p>
         <Objective answer={props.answer} />
         <Constraints answer={props.answer} />
       </div>

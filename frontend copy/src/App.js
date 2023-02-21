@@ -2,12 +2,57 @@ import "./App.css";
 import { useState } from "react";
 import LP from "./input.js";
 import Output from "./output";
+import History from "./history";
+
+const hist = [
+  {
+    objective_vector: [1, 2],
+    objective_constant: 3,
+    A_matrix: [
+      [4, 5],
+      [6, 7],
+    ],
+    constraint_constant: [8, 9],
+    basis: [1, 2],
+  },
+  {
+    objective_vector: [2, 3],
+    objective_constant: 4,
+    A_matrix: [
+      [5, 6],
+      [7, 8],
+    ],
+    constraint_constant: [9, 10],
+    basis: [1, 2],
+  },
+  {
+    objective_vector: [-1, 0, 2],
+    objective_constant: 0,
+    A_matrix: [
+      [4, 5, 6],
+      [-22, 7, 4.2],
+      [1, 1, 1],
+    ],
+    constraint_constant: [8, 9, 33],
+    basis: [1, 2, 3],
+  },
+];
 
 function App() {
   const [numVars, setNumVars] = useState();
   const [numSubmitted, setNumSubmitted] = useState(false);
   const [answer, setAnswer] = useState();
   const [computed, setComputed] = useState(false);
+
+  //for lp
+  const [objVector, setObjVector] = useState(new Array(numVars));
+  const [objConstant, setObjConstant] = useState(0);
+  const [constraintVector, setConstraintVector] = useState(new Array(numVars));
+  const [matrix, setMatrix] = useState([]);
+  const [basis, setBasis] = useState([]);
+  const [numConstraints, setNumConstraints] = useState();
+  const [constSubmitted, setConstSubmitted] = useState(false);
+
   if (numSubmitted) {
     return (
       <div className="App">
@@ -15,10 +60,45 @@ function App() {
           Canonical Form Calculator for Linear Programs in Standard Equality
           Form
         </h2>
-        <header className="App-header">
-          <LP n={numVars} setAnswer={setAnswer} setComputed={setComputed} />
-        </header>
-        <Output answer={answer} computed={computed} />
+        <div className="wrapper">
+          <header className="App-header">
+            <LP
+              n={numVars}
+              setAnswer={setAnswer}
+              setComputed={setComputed}
+              objVector={objVector}
+              setObjVector={setObjVector}
+              objConstant={objConstant}
+              setObjConstant={setObjConstant}
+              constraintVector={constraintVector}
+              setConstraintVector={setConstraintVector}
+              matrix={matrix}
+              setMatrix={setMatrix}
+              basis={basis}
+              setBasis={setBasis}
+              numConstraints={numConstraints}
+              setNumConstraints={setNumConstraints}
+              numSubmitted={constSubmitted}
+              setNumSubmitted={setConstSubmitted}
+            />
+          </header>
+          <Output answer={answer} computed={computed} />
+        </div>
+        <div className="histWrapper">
+          Server History
+          <History
+            history={hist}
+            setNumVars={setNumVars}
+            setObjVector={setObjVector}
+            setMatrix={setMatrix}
+            setConstraintVector={setConstraintVector}
+            setObjConstant={setObjConstant}
+            setBasis={setBasis}
+            setNumConstraints={setNumConstraints}
+            numSubmitted={constSubmitted}
+            setNumSubmitted={setConstSubmitted}
+          />
+        </div>
       </div>
     );
   }

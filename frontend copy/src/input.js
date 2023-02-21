@@ -1,33 +1,33 @@
 import { useEffect, useState } from "react";
 
 export default function LP(props) {
-  const [objVector, setObjVector] = useState(new Array(props.n));
-  const [objConstant, setObjConstant] = useState(0);
-  const [constraintVector, setConstraintVector] = useState(new Array(props.n));
-  const [matrix, setMatrix] = useState([]);
-  const [basis, setBasis] = useState([]);
   return (
     <div>
       <ObjVector
         n={props.n}
-        objVector={objVector}
-        setObjVector={setObjVector}
-        setObjConstant={setObjConstant}
+        objVector={props.objVector}
+        setObjVector={props.setObjVector}
+        setObjConstant={props.setObjConstant}
+        objConstant={props.objConstant}
       />
       <NumOfConstraints
         n={props.n}
-        constraintVector={constraintVector}
-        setConstraintVector={setConstraintVector}
-        matrix={matrix}
-        setMatrix={setMatrix}
+        constraintVector={props.constraintVector}
+        setConstraintVector={props.setConstraintVector}
+        matrix={props.matrix}
+        setMatrix={props.setMatrix}
+        numConstraints={props.numConstraints}
+        setNumConstraints={props.setNumConstraints}
+        numSubmitted={props.numSubmitted}
+        setNumSubmitted={props.setNumSubmitted}
       />
-      <Basis n={props.n} basis={basis} setBasis={setBasis} />
+      <Basis n={props.n} basis={props.basis} setBasis={props.setBasis} />
       <SubmitButton
-        objVector={objVector}
-        objConstant={objConstant}
-        constraintVector={constraintVector}
-        matrix={matrix}
-        basis={basis}
+        objVector={props.objVector}
+        objConstant={props.objConstant}
+        constraintVector={props.constraintVector}
+        matrix={props.matrix}
+        basis={props.basis}
         setAnswer={props.setAnswer}
         setComputed={props.setComputed}
       />
@@ -40,7 +40,7 @@ function Checkbox(props) {
   return (
     <input
       type="checkbox"
-      checked={isChecked}
+      checked={props.basis[props.i] ? true : isChecked}
       onChange={() => {
         setIsChecked(!isChecked);
         let vec = [];
@@ -55,7 +55,7 @@ function Checkbox(props) {
             }
           }
         }
-        props.setBasis(vec);
+        props.setBasis(vec.sort());
       }}
     />
   );
@@ -88,27 +88,39 @@ function Basis(props) {
 }
 
 function SubmitButton(props) {
+  const [error, setError] = useState(false);
+  async function getAnswer(props) {
+    try {
+      setError(false);
+      const json = {
+        objective_vector: props.objVector,
+        objective_constant: props.objConstant,
+        A_matrix: props.matrix,
+        constraint_constant: props.constraintVector,
+        basis: props.basis,
+      };
+      await fetch("/calculator/calculate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(json),
+      })
+        .then((response) => response.json())
+        .then((data) => props.setAnswer(data));
+
+      props.setComputed(true);
+    } catch (error) {
+      setError(true);
+    }
+  }
+  if (error) {
+    return <div>There was an error! Please check the input is valid.</div>;
+  }
   return (
     <button
-      onClick={async () => {
-        const json = {
-          objective_vector: props.objVector,
-          objective_constant: props.objConstant,
-          A_matrix: props.matrix,
-          constraint_constant: props.constraintVector,
-          basis: props.basis,
-        };
-        await fetch("/calculator/calculate", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(json),
-        })
-          .then((response) => response.json())
-          .then((data) => props.setAnswer(data));
-
-        props.setComputed(true);
+      onClick={() => {
+        getAnswer(props);
       }}
     >
       Go!
@@ -133,6 +145,7 @@ function ObjVector(props) {
                     name="vars"
                     min="-100"
                     max="100"
+                    value={props.objVector[i] ? props.objVector[i] : 0}
                     onChange={(e) => {
                       let vec = props.objVector;
                       vec[i] = Number(e.target.value);
@@ -155,6 +168,7 @@ function ObjVector(props) {
                   name="vars"
                   min="-100"
                   max="100"
+                  value={props.objConstant ? props.objConstant : 0}
                   onChange={(e) => {
                     props.setObjConstant(Number(e.target.value));
                   }}
@@ -173,7 +187,7 @@ function ConstVector(props) {
     <div className="vertivector">
       <table>
         <tbody>
-          {[...Array(Number(props.n)).keys()].map((i) => (
+          {[...Array(Number(props.n)).keys()].map((i, index) => (
             <tr key={i}>
               <td>
                 <input
@@ -183,6 +197,11 @@ function ConstVector(props) {
                   name="vars"
                   min="-100"
                   max="100"
+                  value={
+                    props.constraintVector[index]
+                      ? props.constraintVector[index]
+                      : 0
+                  }
                   onChange={(e) => {
                     let vec = props.constraintVector;
                     vec[i] = Number(e.target.value);
@@ -199,15 +218,13 @@ function ConstVector(props) {
 }
 
 function NumOfConstraints(props) {
-  const [numConstraints, setNumConstraints] = useState();
-  const [numSubmitted, setNumSubmitted] = useState(false);
-  if (numSubmitted) {
+  if (props.numSubmitted) {
     return (
       <div>
         <label>Input the Constraints</label>
         <div className="constraints">
           <Matrix
-            m={numConstraints}
+            m={props.numConstraints}
             n={props.n}
             matrix={props.matrix}
             setMatrix={props.setMatrix}
@@ -234,8 +251,8 @@ function NumOfConstraints(props) {
         onKeyDown={(e) => {
           if (e.key === "Enter") {
             if (Number(e.target.value) > 0 && Number(e.target.value) <= 15) {
-              setNumConstraints(Number(e.target.value));
-              setNumSubmitted(true);
+              props.setNumConstraints(Number(e.target.value));
+              props.setNumSubmitted(true);
               e.preventDefault();
             }
           }
@@ -251,23 +268,32 @@ function Matrix(props) {
   );
 
   useEffect(() => {
-    props.setMatrix(temp);
+    if (props.matrix === undefined) {
+      props.setMatrix(temp);
+    }
   }, [temp, props]);
   return (
     <div className="Matrix">
       <table>
-        {[...Array(Number(props.m)).keys()].map((i) => (
-          <tbody key={i}>
+        {[...Array(Number(props.m)).keys()].map((i, index) => (
+          <tbody key={index}>
             <tr>
-              {[...Array(Number(props.n)).keys()].map((j) => (
-                <td key={j}>
+              {[...Array(Number(props.n)).keys()].map((j, jndex) => (
+                <td key={jndex}>
                   <input
                     className="cell"
-                    id={j}
+                    id={jndex}
                     type="number"
                     name="vars"
                     min="-100"
                     max="100"
+                    value={
+                      props.matrix[index]
+                        ? props.matrix[index][jndex]
+                          ? props.matrix[index][jndex]
+                          : 0
+                        : 0
+                    }
                     onChange={(e) => {
                       setTemp(
                         temp.map((x, index) => {
