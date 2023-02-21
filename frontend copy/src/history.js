@@ -2,7 +2,7 @@ import "katex/dist/katex.min.css";
 import { BlockMath } from "react-katex";
 
 export default function History(props) {
-  if (props.computed) {
+  if (props.history) {
     return (
       <div className="history">
         {props.history.map((i, index) => (
@@ -22,8 +22,9 @@ export default function History(props) {
         ))}
       </div>
     );
+  } else {
+    return;
   }
-  return;
 }
 
 function LatexLP(props) {

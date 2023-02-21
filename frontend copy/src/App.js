@@ -1,28 +1,38 @@
 import "./App.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import LP from "./input.js";
 import Output from "./output";
 import History from "./history";
 
 function App() {
-  const [numVars, setNumVars] = useState();
+  const [numVars, setNumVars] = useState(0);
   const [numSubmitted, setNumSubmitted] = useState(false);
   const [answer, setAnswer] = useState();
   const [computed, setComputed] = useState(false);
 
   //for lp
-  const [objVector, setObjVector] = useState(new Array(numVars));
+  const [objVector, setObjVector] = useState([0]);
   const [objConstant, setObjConstant] = useState(0);
-  const [constraintVector, setConstraintVector] = useState(new Array(numVars));
+  const [constraintVector, setConstraintVector] = useState();
   const [matrix, setMatrix] = useState([]);
   const [basis, setBasis] = useState([]);
   const [numConstraints, setNumConstraints] = useState();
   const [constSubmitted, setConstSubmitted] = useState(false);
+  const [hist, setHist] = useState();
 
-  const hist = fetch("/calculator/history", {
-    method: "GET",
-  });
+  fetch("/calculator/history", {
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+  })
+    .then((response) => response.json())
+    .then((data) => setHist(data));
 
+  useEffect(() => {
+    setObjVector(new Array(Number(numVars)));
+    setConstraintVector(new Array(Number(numVars)));
+  }, [numVars]);
   if (numSubmitted) {
     return (
       <div className="App">
@@ -57,7 +67,18 @@ function App() {
         <div className="histWrapper">
           Server History
           <History
-            history={hist}
+            history={[
+              {
+                objective_vector: [1, 2],
+                objective_constant: 3,
+                A_matrix: [
+                  [4, 5],
+                  [6, 7],
+                ],
+                constraint_constant: [8, 9],
+                basis: [1, 2],
+              },
+            ]}
             setNumVars={setNumVars}
             setObjVector={setObjVector}
             setMatrix={setMatrix}
@@ -67,7 +88,6 @@ function App() {
             setNumConstraints={setNumConstraints}
             numSubmitted={constSubmitted}
             setNumSubmitted={setConstSubmitted}
-            computed={computed}
           />
         </div>
       </div>

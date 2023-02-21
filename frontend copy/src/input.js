@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 
 export default function LP(props) {
+  console.log();
   return (
     <div>
       <ObjVector
@@ -129,6 +130,8 @@ function SubmitButton(props) {
 }
 
 function ObjVector(props) {
+  const [vec, setVec] = useState();
+  console.log(props.objVector);
   return (
     <div>
       <label>Input the Objective Function</label>
@@ -145,11 +148,11 @@ function ObjVector(props) {
                     name="vars"
                     min="-100"
                     max="100"
-                    value={props.objVector[i] ? props.objVector[i] : 0}
+                    value={props.objVector[i]}
                     onChange={(e) => {
-                      let vec = props.objVector;
-                      vec[i] = Number(e.target.value);
-                      props.setObjVector(vec);
+                      let x = props.objVector;
+                      x[i] = Number(e.target.value);
+                      props.setObjVector(x);
                     }}
                   />
                 </td>
